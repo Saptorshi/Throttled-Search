@@ -1,0 +1,39 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"> 
+<head>
+<!-- 
+State  Description
+0      The request is not initialized
+1      The request has been set up
+2      The request has been sent
+3      The request is in process
+4      The request is complete 
+-->
+<script>
+function throttledS(str) {
+    if (str.length == 0) { 
+        document.getElementById("result").innerHTML = "";
+        return;
+    } else {
+        var xmlhttp = new XMLHttpRequest();
+        xmlhttp.open("GET", "Search.php?text=" + str, true);
+        xmlhttp.send();
+
+        xmlhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                var jsonObj = JSON.parse(this.responseText);
+                document.getElementById("result").innerHTML = jsonObj;
+            }
+        };
+    }
+}
+</script>
+</head>
+<body>
+    <form> 
+        <input type="inputText" onkeyup="throttledS(this.value)">
+    </form>
+<p>Results: <span id="result"></span></p>
+</body>
+</html>
